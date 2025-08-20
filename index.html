@@ -5,25 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Dashboard</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .card { padding: 20px; margin: 10px; border-radius: 8px; background: #f5f5f5; display: inline-block; }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #fafafa; }
+    h1 { margin-bottom: 20px; }
+    .cards { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+    .card { flex: 1; min-width: 180px; background: white; padding: 20px; border-radius: 12px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .card h2 { margin: 0; font-size: 14px; color: #666; }
+    .card p { margin: 8px 0 0; font-size: 22px; font-weight: bold; }
+    .charts { display: flex; flex-wrap: wrap; gap: 30px; }
+    .chart-container { flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px;
+                       box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    canvas { width: 100% !important; height: auto !important; }
   </style>
 </head>
 <body>
   <h1>📊 My Dashboard</h1>
-  <div class="card">Visitors: <span id="visitors">120</span></div>
-  <div class="card">Sales: <span id="sales">45</span></div>
 
-  <canvas id="chart" width="400" height="200"></canvas>
+  <!-- Summary Cards -->
+  <div class="cards">
+    <div class="card">
+      <h2>Visitors</h2>
+      <p id="visitors">120</p>
+    </div>
+    <div class="card">
+      <h2>Sales</h2>
+      <p id="sales">45</p>
+    </div>
+    <div class="card">
+      <h2>Revenue</h2>
+      <p id="revenue">$2,340</p>
+    </div>
+    <div class="card">
+      <h2>Active Users</h2>
+      <p id="users">87</p>
+    </div>
+  </div>
 
+  <!-- Charts Section -->
+  <div class="charts">
+    <div class="chart-container">
+      <h2>Visitors This Week</h2>
+      <canvas id="visitorsChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2>Revenue Trend</h2>
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    const ctx = document.getElementById('chart').getContext('2d');
-    new Chart(ctx, {
+    // Visitors by weekday (Bar Chart)
+    const ctxVisitors = document.getElementById('visitorsChart').getContext('2d');
+    new Chart(ctxVisitors, {
       type: 'bar',
       data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-        datasets: [{ label: 'Visitors', data: [12, 19, 3, 5, 2] }]
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Visitors',
+          data: [120, 150, 90, 200, 170, 220, 140],
+          backgroundColor: '#4e79a7'
+        }]
+      }
+    });
+
+    // Revenue trend (Line Chart)
+    const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctxRevenue, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Revenue ($)',
+          data: [1200, 1500, 1700, 1600, 1900, 2340],
+          borderColor: '#e15759',
+          fill: false,
+          tension: 0.3
+        }]
       }
     });
   </script>
